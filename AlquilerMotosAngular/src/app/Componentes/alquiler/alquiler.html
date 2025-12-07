@@ -1,0 +1,48 @@
+<div class="eco-card">
+  <div class="card-header">🌿 Nuevo Alquiler</div>
+
+  <div class="card-body">
+
+    <label class="form-label">Cliente</label>
+    <select class="form-select" [(ngModel)]="clienteId">
+      <option [ngValue]="null" disabled>Seleccione un cliente</option>
+      <option *ngFor="let c of clientes$ | async" [value]="c.id">
+        {{c.nombre}} <span *ngIf="c.esFrecuente">⭐</span>
+      </option>
+    </select>
+
+    <label class="form-label">Vehículo Ecológico</label>
+    <select class="form-select" [(ngModel)]="vehiculoCod">
+      <option [ngValue]="null" disabled>Seleccione vehículo</option>
+      <option *ngFor="let v of vehiculos$ | async"
+              [value]="v.codigo"
+              [disabled]="v.estado === 'ALQUILADO'">
+        {{v.nombre}} - {{v.precioDia | currency}}/día
+      </option>
+    </select>
+
+    <div class="fechas">
+      <div>
+        <label class="form-label">Inicio</label>
+        <input type="date" class="form-input" [(ngModel)]="fInicio">
+      </div>
+
+      <div>
+        <label class="form-label">Devolución</label>
+        <input type="date" class="form-input" [(ngModel)]="fTentativa">
+      </div>
+    </div>
+
+    <button class="btn-submit" (click)="registrar()">
+      PROCESAR ALQUILER
+    </button>
+
+    <div *ngIf="mensaje" class="alert">
+      {{mensaje}}
+    </div>
+
+  </div>
+
+
+
+</div>

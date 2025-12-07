@@ -1,0 +1,92 @@
+.eco-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+.card-header {
+  background: #059669;
+  color: white;
+  padding: 1rem;
+  font-weight: 600;
+}
+
+.card-body { padding: 1.5rem; }
+
+.form-label {
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.form-select, .form-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.form-select:focus, .form-input:focus {
+  outline: none;
+  border-color: #059669;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+}
+
+@media (max-width: 480px) {
+  .fechas {
+    flex-direction: column;
+  }
+}
+
+.btn-submit {
+  width: 100%;
+  background: #10b981;
+  color: white;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-submit:hover { background: #047857; }
+
+.alert {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: #ecfdf5;
+  color: #065f46;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.tabla-title {
+  margin-top: 2rem;
+  font-weight: bold;
+  color: #065f46;
+}
+
+.tabla-detalle {
+  width: 100%;
+  margin-top: 0.5rem;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.tabla-detalle th {
+  background: #10b981;
+  color: white;
+  padding: 0.7rem;
+}
+
+.tabla-detalle td {
+  padding: 0.7rem;
+  border-bottom: 1px solid #e5e7eb;
+}

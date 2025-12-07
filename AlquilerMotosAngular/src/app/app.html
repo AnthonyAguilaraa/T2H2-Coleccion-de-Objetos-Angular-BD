@@ -1,0 +1,21 @@
+<header class="app-header">
+  <div class="container">
+    <span class="logo">🌱 Eco-Move</span>
+
+    <nav>
+      <a routerLink="/inicio" routerLinkActive="active" class="nav-link">Inicio</a>
+      <a routerLink="/alquilerResumen" routerLinkActive="active" class="nav-link">Alquiler</a>
+      <a routerLink="/devolucionesResumen" routerLinkActive="active" class="nav-link">Devoluciones</a>
+      <a routerLink="/reportesResumen" routerLinkActive="active" class="nav-link">Reportes</a>
+      <a routerLink="/administrar" routerLinkActive="active" class="nav-link admin-link">Administrar</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <router-outlet></router-outlet>
+</main>
+
+<footer>
+  <p>© 2024 Eco-Move S.A. - Desarrollado con Angular</p>
+</footer>

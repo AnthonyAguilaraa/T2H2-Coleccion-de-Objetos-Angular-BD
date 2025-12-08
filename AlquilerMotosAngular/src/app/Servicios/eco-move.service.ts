@@ -32,15 +32,30 @@ export class EcoMoveService {
   // ==========================================
   // METODOS API (GET & REFRESH)
   // ==========================================
-  obtenerClientes() {
-    this.http.get<Cliente[]>(`${this.apiUrl}/clientes`)
-      .subscribe(data => this.clientes$.next(data));
-  }
+  // obtenerClientes() {
+  //   this.http.get<Cliente[]>(`${this.apiUrl}/clientes`)
+  //     .subscribe(data => this.clientes$.next(data));
+  // }
 
-  obtenerVehiculos() {
-    this.http.get<Vehiculo[]>(`${this.apiUrl}/vehiculos`)
-      .subscribe(data => this.vehiculos$.next(data));
-  }
+  // obtenerVehiculos() {
+  //   this.http.get<Vehiculo[]>(`${this.apiUrl}/vehiculos`)
+  //     .subscribe(data => this.vehiculos$.next(data));
+  // }
+  obtenerClientes() {
+  this.http.get<Cliente[]>(`${this.apiUrl}/clientes`)
+    .subscribe(data => {
+      console.log('Clientes obtenidos:', data);  // Asegúrate de que los clientes se reciban correctamente
+      this.clientes$.next(data);
+    });
+}
+
+obtenerVehiculos() {
+  this.http.get<Vehiculo[]>(`${this.apiUrl}/vehiculos`)
+    .subscribe(data => {
+      console.log('Vehículos obtenidos:', data);  // Verifica que los vehículos se reciban correctamente
+      this.vehiculos$.next(data);
+    });
+}
 
   obtenerAlquileres() {
     this.http.get<Alquiler[]>(`${this.apiUrl}/alquileres`)
@@ -106,85 +121,110 @@ actualizarVehiculo(codigo: string, vehiculo: Vehiculo) {
   // ==========================================
   
   // Paso 1: Validaciones (Síncronas) -> Paso 2: Guardar en BD (Asíncrono)
+  // crearAlquiler(clienteId: string, vehiculoCodigo: string, fInicio: Date, fTentativa: Date): void {
+  //   const cliente = this.clientes$.getValue().find(c => c._id === clienteId);
+  //   const vehiculo = this.vehiculos$.getValue().find(v => v.codigo === vehiculoCodigo);
+
+  //   if (!cliente || !vehiculo) { alert('Error: Datos no encontrados'); return; }
+  //   if (vehiculo.estado === 'ALQUILADO') { alert('Error: Vehículo no disponible'); return; }
+  //   if (vehiculo.requiereEdad && cliente.edad < 18) { alert('Cliente menor de edad'); return; }
+
+  //   // Cálculos en Frontend (para enviar ya calculado al backend)
+  //   const dias = Math.max(1, Math.ceil((new Date(fTentativa).getTime() - new Date(fInicio).getTime()) / (1000 * 3600 * 24)));
+  //   const importe = dias * vehiculo.tarifaDia;
+  //   const descExt = dias > 5 ? importe * 0.15 : 0;
+  //   const subtotal = importe - descExt;
+  //   const descFrec = cliente.esFrecuente ? subtotal * 0.10 : 0;
+  //   const deposito = importe * 0.12;
+
+  //   const nuevoAlquiler: any = {
+  //     clienteId: clienteId,
+  //     vehiculoCodigo: vehiculoCodigo,
+  //     fechaInicio: fInicio,
+  //     fechaTentativa: fTentativa,
+  //     diasCalculados: dias,
+  //     importeBase: importe,
+  //     descuentoExtendido: descExt,
+  //     descuentoFrecuente: descFrec,
+  //     deposito: deposito,
+  //     totalPagadoInicial: (importe - descExt - descFrec) + deposito,
+  //     estado: 'ACTIVO'
+  //   };
+
+  //   // Enviar al Backend
+  //   this.http.post(`${this.apiUrl}/alquileres`, nuevoAlquiler).subscribe({
+  //     next: () => {
+  //       alert('✅ Alquiler registrado con éxito en BD');
+  //       this.obtenerAlquileres(); // Actualiza lista alquileres
+  //       this.obtenerVehiculos();  // Actualiza estado de vehículos (Disponible -> Alquilado)
+  //     },
+  //     error: (err) => alert('❌ Error en servidor: ' + err.error.msg)
+  //   });
+  // }
+
   crearAlquiler(clienteId: string, vehiculoCodigo: string, fInicio: Date, fTentativa: Date): void {
-    const cliente = this.clientes$.getValue().find(c => c._id === clienteId);
-    const vehiculo = this.vehiculos$.getValue().find(v => v.codigo === vehiculoCodigo);
+  const cliente = this.clientes$.getValue().find(c => c._id === clienteId);
+  const vehiculo = this.vehiculos$.getValue().find(v => v.codigo === vehiculoCodigo);
 
-    if (!cliente || !vehiculo) { alert('Error: Datos no encontrados'); return; }
-    if (vehiculo.estado === 'ALQUILADO') { alert('Error: Vehículo no disponible'); return; }
-    if (vehiculo.requiereEdad && cliente.edad < 18) { alert('Cliente menor de edad'); return; }
+  // Verificación de datos
+  console.log('Cliente:', cliente);
+  console.log('Vehículo:', vehiculo);
+  console.log('Fechas:', fInicio, fTentativa);
 
-    // Cálculos en Frontend (para enviar ya calculado al backend)
-    const dias = Math.max(1, Math.ceil((new Date(fTentativa).getTime() - new Date(fInicio).getTime()) / (1000 * 3600 * 24)));
-    const importe = dias * vehiculo.tarifaDia;
-    const descExt = dias > 5 ? importe * 0.15 : 0;
-    const subtotal = importe - descExt;
-    const descFrec = cliente.esFrecuente ? subtotal * 0.10 : 0;
-    const deposito = importe * 0.12;
+  if (!cliente || !vehiculo) { alert('Error: Datos no encontrados'); return; }
+  if (vehiculo.estado === 'ALQUILADO') { alert('Error: Vehículo no disponible'); return; }
 
-    const nuevoAlquiler: any = {
-      clienteId: clienteId,
-      vehiculoCodigo: vehiculoCodigo,
-      fechaInicio: fInicio,
-      fechaTentativa: fTentativa,
-      diasCalculados: dias,
-      importeBase: importe,
-      descuentoExtendido: descExt,
-      descuentoFrecuente: descFrec,
-      deposito: deposito,
-      totalPagadoInicial: (importe - descExt - descFrec) + deposito,
-      estado: 'ACTIVO'
-    };
+  const nuevoAlquiler = {
+    clienteId: clienteId,
+    vehiculoCodigo: vehiculoCodigo,
+    fechaInicio: fInicio,
+    fechaTentativa: fTentativa,
+    // Otros datos calculados
+  };
 
-    // Enviar al Backend
-    this.http.post(`${this.apiUrl}/alquileres`, nuevoAlquiler).subscribe({
-      next: () => {
-        alert('✅ Alquiler registrado con éxito en BD');
-        this.obtenerAlquileres(); // Actualiza lista alquileres
-        this.obtenerVehiculos();  // Actualiza estado de vehículos (Disponible -> Alquilado)
-      },
-      error: (err) => alert('❌ Error en servidor: ' + err.error.msg)
-    });
-  }
+  // Enviar al Backend
+  this.http.post(`${this.apiUrl}/alquileres`, nuevoAlquiler).subscribe({
+    next: () => {
+      alert('✅ Alquiler registrado con éxito en BD');
+      this.obtenerAlquileres();
+      this.obtenerVehiculos();
+    },
+    error: (err) => alert('❌ Error en servidor: ' + err.error.msg)
+  });
+}
 
   // ==========================================
   // LÓGICA DE NEGOCIO: DEVOLUCIÓN
   // ==========================================
-  procesarDevolucion(alquilerId: string, fechaReal: Date): void {
-    const alquiler = this.alquileres$.getValue().find(a => a._id === alquilerId);
-    if (!alquiler) return;
-
-    // Calcular Mora (Podríamos hacerlo en backend, pero si ya tienes la lógica aquí, enviémosla)
-    // NOTA: Para simplificar, dejaremos que el backend guarde los datos que enviamos
-    const fTentativa = new Date(alquiler.fechaTentativa);
-    const fReal = new Date(fechaReal);
-    
-    // Necesitamos la tarifa del vehículo para calcular multa
-    const vehiculo = this.vehiculos$.getValue().find(v => v.codigo === alquiler.vehiculoCodigo);
-    let diasMora = 0;
-    let multa = 0;
-
-    if (fReal.getTime() > fTentativa.getTime()) {
-      diasMora = Math.ceil((fReal.getTime() - fTentativa.getTime()) / (1000 * 3600 * 24));
-      if (vehiculo) multa = (vehiculo.tarifaDia * 0.10) * diasMora;
-    }
-
-    const payload = {
-      fechaDevolucionReal: fReal,
-      diasMora,
-      multa
-    };
-
-    this.http.put(`${this.apiUrl}/alquileres/finalizar/${alquilerId}`, payload).subscribe({
-      next: (res: any) => {
-        const msg = res.diasMora > 0 ? `Multa de $${res.multa}` : 'Devolución a tiempo';
-        alert(`✅ Devolución procesada. ${msg}`);
-        this.obtenerAlquileres();
-        this.obtenerVehiculos(); // Libera el vehículo
-      },
-      error: (e) => alert('Error: ' + e.message)
-    });
+  procesarDevolucion(alquilerId: string, fechaReal: Date): Observable<any> {
+  const alquiler = this.alquileres$.getValue().find(a => a._id === alquilerId);
+  if (!alquiler) {
+    throw new Error('Alquiler no encontrado');
   }
+
+  // Calcular Mora (Podríamos hacerlo en backend, pero si ya tienes la lógica aquí, enviémosla)
+  const fTentativa = new Date(alquiler.fechaTentativa);
+  const fReal = new Date(fechaReal);
+  
+  // Necesitamos la tarifa del vehículo para calcular multa
+  const vehiculo = this.vehiculos$.getValue().find(v => v.codigo === alquiler.vehiculoCodigo);
+  let diasMora = 0;
+  let multa = 0;
+
+  if (fReal.getTime() > fTentativa.getTime()) {
+    diasMora = Math.ceil((fReal.getTime() - fTentativa.getTime()) / (1000 * 3600 * 24));
+    if (vehiculo) multa = (vehiculo.tarifaDia * 0.10) * diasMora;
+  }
+
+  const payload = {
+    fechaDevolucionReal: fReal,
+    diasMora,
+    multa
+  };
+
+  return this.http.put(`${this.apiUrl}/alquileres/finalizar/${alquilerId}`, payload);
+}
+
 
   // ==========================================
   // REPORTES (Consumen tus 5 endpoints nuevos)

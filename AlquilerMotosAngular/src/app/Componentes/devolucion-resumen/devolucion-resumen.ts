@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { EcoMoveService } from '../../Servicios/eco-move.service';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class DevolucionResumen implements OnInit {
 
+   private cdr = inject(ChangeDetectorRef);
   alquileres$!: Observable<any[]>;
   private service = inject(EcoMoveService);
 
@@ -21,6 +22,9 @@ export class DevolucionResumen implements OnInit {
 
   ngOnInit() {
     this.alquileres$ = this.service.alquileres$;
+
+  this.service.obtenerClientes();
+  this.service.obtenerVehiculos();
   }
 
   devolver(a: any) {
@@ -30,21 +34,24 @@ export class DevolucionResumen implements OnInit {
   }
 
   calcular() {
+
     if (!this.fechaReal || !this.seleccionado) return;
 
-    const a = this.seleccionado;
-    
-    const veh = this.service.vehiculos$.getValue()
-      .find(v => v.codigo === a.vehiculoCodigo);
+  const a = this.seleccionado;
+  console.log('Alquiler seleccionado:', a);  // Para asegurar que 'clienteId' es un objeto
 
-    const cliente = this.service.clientes$.getValue()
-      .find(c => c._id === a.clienteId);
+  const veh = this.service.vehiculos$.getValue()
+    .find(v => v.codigo === a.vehiculoCodigo);
 
-    // VALIDACIÓN NECESARIA
-    if (!veh || !cliente) {
-      console.error("Vehículo o cliente no encontrado");
-      return;
-    }
+  // Acceder correctamente a clienteId._id
+  const cliente = this.service.clientes$.getValue()
+    .find(c => c._id === a.clienteId._id);  // Modificación aquí
+
+  // VALIDACIÓN NECESARIA
+  if (!veh || !cliente) {
+    console.error("Vehículo o cliente no encontrado");
+    return;
+  }
 
     const fIni = new Date(a.fechaInicio);
     const fTen = new Date(a.fechaTentativa);
@@ -84,13 +91,23 @@ export class DevolucionResumen implements OnInit {
   }
 
   confirmar() {
-    if (!this.seleccionado || !this.fechaReal) return;
+  console.log("Confirmar devolución ejecutada", this.seleccionado, this.fechaReal);
+  if (!this.seleccionado || !this.fechaReal) return;
 
-    // Llamar al servicio para procesar la devolución
-    this.service.procesarDevolucion(this.seleccionado._id, new Date(this.fechaReal));
+  this.service.procesarDevolucion(this.seleccionado._id, new Date(this.fechaReal)).subscribe({
+    next: () => {
+      this.resumen = null;
+      this.seleccionado = null;
 
-    // Limpiar el resumen y selección
-    this.resumen = null;
-    this.seleccionado = null;
-  }
+this.cdr.detectChanges();
+      console.log("Devolución procesada con éxito");
+    },
+    error: (err) => {
+      console.error("Error al procesar la devolución", err);
+      alert("Hubo un error al procesar la devolución. Intenta nuevamente.");
+    }
+  });
+}
+
+
 }

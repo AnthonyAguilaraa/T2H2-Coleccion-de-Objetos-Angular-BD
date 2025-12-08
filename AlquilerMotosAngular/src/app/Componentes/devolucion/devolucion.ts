@@ -47,4 +47,6 @@ export class Devolucion implements OnInit {
   esTardio(fechaTentativa: string): boolean {
     return new Date() > new Date(fechaTentativa);
   }
+
+  
 }

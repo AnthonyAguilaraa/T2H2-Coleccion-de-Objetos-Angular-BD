@@ -14,7 +14,7 @@
         <label class="form-label">Cliente</label>
         <select class="form-select" [(ngModel)]="clienteId" (change)="calcularResumen()">
           <option [ngValue]="null" disabled>Seleccione un cliente</option>
-          <option *ngFor="let c of clientes$ | async" [value]="c.id">
+          <option *ngFor="let c of clientes$ | async" [value]="c._id">
             {{c.nombre}} <span *ngIf="c.esFrecuente">⭐</span>
           </option>
         </select>

@@ -1,4 +1,5 @@
 export interface Vehiculo {
+  _id?: string;
   codigo: string;
   nombre: string;
   tarifaDia: number;

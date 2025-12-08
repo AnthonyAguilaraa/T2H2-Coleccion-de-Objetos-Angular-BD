@@ -3,25 +3,28 @@
   display: flex;
   gap: 20px;
   margin-bottom: 40px;
+  padding: 10px; /* Un poco de padding al contenedor */
 }
 
 .col-izquierda {
-  flex: 2;
+  flex: 2; /* Ocupa el 66% aprox */
 }
 
 .col-derecha {
-  flex: 1.2;
+  flex: 1.2; /* Ocupa el 33% aprox */
 }
 
-/* Que se haga vertical en pantallas pequeñas */
+/* Responsividad */
 @media (max-width: 900px) {
   .alquiler-layout {
     flex-direction: column;
   }
+  .resumen-card {
+      position: static !important; /* Ya no es sticky en móvil */
+  }
 }
 
 /* ======== TARJETAS Y FORMULARIO ======== */
-
 .eco-card {
   background: white;
   border-radius: 12px;
@@ -61,10 +64,14 @@
   box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
 }
 
+.fechas {
+  display: flex;
+  gap: 1rem;
+}
+.fechas > div { flex: 1; }
+
 @media (max-width: 480px) {
-  .fechas {
-    flex-direction: column;
-  }
+  .fechas { flex-direction: column; }
 }
 
 .btn-submit {
@@ -76,11 +83,11 @@
   font-weight: 600;
   border: none;
   cursor: pointer;
+  transition: background 0.3s;
 }
 
-.btn-submit:hover {
-  background: #047857;
-}
+.btn-submit:hover { background: #047857; }
+.btn-submit:disabled { background: #9ca3af; cursor: not-allowed; }
 
 .alert {
   margin-top: 1rem;
@@ -91,27 +98,31 @@
   text-align: center;
 }
 
-/* ======== RESUMEN ======== */
+/* ======== RESUMEN (Sticky Sidebar) ======== */
 .resumen-card {
-  background: #ecfdf5;
-  border: 1px solid #10b981;
-  padding: 1rem;
-  border-radius: 10px;
+  background: #f0fdf4; /* Un verde muy suave */
+  border: 1px solid #86efac;
+  padding: 1.5rem;
+  border-radius: 12px;
   position: sticky;
-  top: 20px; /* se queda visible al hacer scroll */
+  top: 20px; 
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 .resumen-card h3 {
   color: #065f46;
   font-weight: 700;
+  margin-top: 0;
   margin-bottom: 1rem;
+  font-size: 1.25rem;
 }
 
 .row {
   display: flex;
   justify-content: space-between;
-  padding: 4px 0;
+  padding: 6px 0;
   font-size: 0.95rem;
+  align-items: center;
 }
 
 .label {
@@ -120,9 +131,10 @@
 }
 
 .total {
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-size: 1.3rem;
+  font-weight: 800;
   color: #047857;
+  margin-top: 5px;
 }
 
 /* ======== TABLA DE TARIFAS ======== */
@@ -130,6 +142,7 @@
   margin-top: 2rem;
   font-weight: bold;
   color: #065f46;
+  font-size: 1.1rem;
 }
 
 .tabla-detalle {
@@ -139,15 +152,18 @@
   margin-top: 0.5rem;
   border-radius: 10px;
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .tabla-detalle th {
   background: #10b981;
   color: white;
-  padding: 0.7rem;
+  padding: 0.75rem;
+  text-align: left;
 }
 
 .tabla-detalle td {
-  padding: 0.7rem;
+  padding: 0.75rem;
   border-bottom: 1px solid #e5e7eb;
+  color: #4b5563;
 }

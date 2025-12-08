@@ -1,58 +1,86 @@
-.admin-panel {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-}
+.admin-container { padding: 2rem; max-width: 1000px; margin: 0 auto; }
+.admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+.btn-back { background: #6b7280; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; }
 
-.card {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 12px;
-  border: 1px solid #d1fae5;
+/* Menu Grid */
+.dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+.card-menu {
+  background: white; padding: 2rem; border-radius: 12px;
+  text-align: center; cursor: pointer; border: 1px solid #e5e7eb;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
+.card-menu:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border-color: #10b981; }
+.card-menu .icon { font-size: 3rem; margin-bottom: 1rem; }
 
-h3 {
-  color: #065f46;
-  margin-bottom: 1rem;
+/* CRUD Panels */
+.crud-panel { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+
+/* Formularios en línea */
+.form-row {
+  display: flex;
+  gap: 10px;
+  background: #f3f4f6;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .input {
-  width: 100%;
-  margin-bottom: 0.5rem;
-  padding: 0.4rem;
+  padding: 0.6rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  flex: 1; /* Crecen para llenar espacio */
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  user-select: none;
 }
 
 button {
   background: #10b981;
   color: white;
   border: none;
-  padding: 0.5rem;
+  padding: 0.6rem 1rem;
   border-radius: 6px;
-  margin-top: 0.5rem;
   cursor: pointer;
+  font-weight: 600;
 }
+button:hover { background: #059669; }
 
-.admin-container { padding: 2rem; max-width: 1000px; margin: 0 auto; }
-.admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-.btn-back { background: #6b7280; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; }
-
-/* Tarjetas del Menú */
-.dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
-.card-menu {
-  background: white; padding: 2rem; border-radius: 12px;
-  text-align: center; cursor: pointer; border: 1px solid #e5e7eb;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.card-menu:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border-color: #10b981; }
-.card-menu .icon { font-size: 3rem; margin-bottom: 1rem; }
-
-/* Tablas y Listas */
-.crud-panel { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+/* Listas */
 .list-group { list-style: none; padding: 0; }
-.list-group li { padding: 0.8rem; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
-.admin-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-.admin-table th, .admin-table td { padding: 0.8rem; text-align: left; border-bottom: 1px solid #eee; }
-.btn-delete { background: #ef4444; color: white; border: none; padding: 0.3rem 0.6rem; border-radius: 4px; cursor: pointer; }
+.list-group li { 
+  padding: 1rem; 
+  border-bottom: 1px solid #eee; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+}
+.list-group li:last-child { border-bottom: none; }
 
-.DISPONIBLE { color: green; font-weight: bold; }
-.ALQUILADO { color: orange; font-weight: bold; }
+.info { display: flex; align-items: center; gap: 10px; }
+.code { font-family: monospace; background: #eee; padding: 2px 5px; border-radius: 4px; }
+.subtext { color: #6b7280; font-size: 0.9rem; }
+
+/* Tablas */
+.admin-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+.admin-table th { background: #f9fafb; font-weight: 600; color: #374151; }
+.admin-table th, .admin-table td { padding: 0.8rem; text-align: left; border-bottom: 1px solid #eee; }
+
+/* Estados y Botones Acción */
+.tag { background: #fcd34d; color: #92400e; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
+.DISPONIBLE { color: #059669; background: #d1fae5; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+.ALQUILADO { color: #d97706; background: #fef3c7; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+
+.btn-delete { background: #ef4444; padding: 0.4rem 0.8rem; font-size: 0.85rem; }
+.btn-delete:hover { background: #dc2626; }
+
+.id-cell { font-family: monospace; color: #6b7280; font-size: 0.85rem; }

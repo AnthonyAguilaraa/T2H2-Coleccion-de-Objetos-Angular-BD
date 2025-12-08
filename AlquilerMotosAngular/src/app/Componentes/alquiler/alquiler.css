@@ -90,3 +90,18 @@
   padding: 0.7rem;
   border-bottom: 1px solid #e5e7eb;
 }
+
+
+/* Puedes añadir esto al final de tu CSS existente para centrarlo */
+:host {
+  display: block;
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.eco-card {
+  width: 100%;
+  max-width: 500px; /* Limita el ancho de la tarjeta */
+  /* ... resto de tu CSS ... */
+}

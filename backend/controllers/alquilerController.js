@@ -1,5 +1,7 @@
+const mongoose = require('mongoose');
 const Alquiler = require('../models/Alquiler');
 const Vehiculo = require('../models/Vehiculo');
+
 
 exports.crearAlquiler = async (req, res) => {
     // Aquí recibimos los datos ya calculados del Front, 
@@ -69,6 +71,44 @@ exports.finalizarAlquiler = async (req, res) => {
     } catch (error) {
         await session.abortTransaction();
         res.status(500).json({ msg: 'Error finalizando alquiler' });
+    } finally {
+        session.endSession();
+    }
+};
+
+// Eliminar/Cancelar Alquiler
+exports.eliminarAlquiler = async (req, res) => {
+    const { id } = req.params;
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        // 1. Buscar el alquiler antes de borrarlo para saber qué vehículo tiene
+        const alquiler = await Alquiler.findById(id).session(session);
+
+        if (!alquiler) {
+            await session.abortTransaction();
+            return res.status(404).json({ msg: 'Alquiler no encontrado' });
+        }
+
+        // 2. Si el alquiler estaba ACTIVO, debemos liberar el vehículo
+        if (alquiler.estado === 'ACTIVO') {
+            await Vehiculo.findOneAndUpdate(
+                { codigo: alquiler.vehiculoCodigo },
+                { estado: 'DISPONIBLE' },
+                { session }
+            );
+        }
+
+        // 3. Eliminar el alquiler
+        await Alquiler.findByIdAndDelete(id, { session });
+
+        await session.commitTransaction();
+        res.json({ msg: 'Alquiler eliminado y vehículo liberado (si estaba activo)' });
+
+    } catch (error) {
+        await session.abortTransaction();
+        res.status(500).json({ msg: 'Error al eliminar alquiler', error });
     } finally {
         session.endSession();
     }

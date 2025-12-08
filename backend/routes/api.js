@@ -5,12 +5,14 @@ const router = express.Router();
 const vehiculoCtrl = require('../controllers/vehiculoController');
 const alquilerCtrl = require('../controllers/alquilerController');
 const clienteCtrl = require('../controllers/clienteController'); // <--- Importamos Cliente
+const reporteCtrl = require('../controllers/reporteController');
 
 // ==========================
 // RUTAS DE CLIENTES
 // ==========================
 router.get('/clientes', clienteCtrl.obtenerClientes);
 router.post('/clientes', clienteCtrl.crearCliente);
+router.put('/clientes/:id', clienteCtrl.actualizarCliente); // <--- NUEVO
 router.delete('/clientes/:id', clienteCtrl.eliminarCliente);
 
 // ==========================
@@ -18,7 +20,8 @@ router.delete('/clientes/:id', clienteCtrl.eliminarCliente);
 // ==========================
 router.get('/vehiculos', vehiculoCtrl.obtenerVehiculos);
 router.post('/vehiculos', vehiculoCtrl.crearVehiculo);
-// router.delete('/vehiculos/:id', vehiculoCtrl.eliminarVehiculo); // (Opcional si lo implementas luego)
+router.put('/vehiculos/:codigo', vehiculoCtrl.actualizarVehiculo); // <--- NUEVO
+router.delete('/vehiculos/:codigo', vehiculoCtrl.eliminarVehiculo);
 
 // ==========================
 // RUTAS DE ALQUILERES
@@ -26,6 +29,7 @@ router.post('/vehiculos', vehiculoCtrl.crearVehiculo);
 router.get('/alquileres', alquilerCtrl.obtenerAlquileres);
 router.post('/alquileres', alquilerCtrl.crearAlquiler);
 router.put('/alquileres/finalizar/:id', alquilerCtrl.finalizarAlquiler);
+router.delete('/alquileres/:id', alquilerCtrl.eliminarAlquiler); // <--- NUEVO
 
 // ==========================
 // RUTAS DE REPORTES

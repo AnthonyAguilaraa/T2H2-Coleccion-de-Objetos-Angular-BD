@@ -6,7 +6,7 @@
     <label class="form-label">Cliente</label>
     <select class="form-select" [(ngModel)]="clienteId">
       <option [ngValue]="null" disabled>Seleccione un cliente</option>
-      <option *ngFor="let c of clientes$ | async" [value]="c.id">
+      <option *ngFor="let c of clientes$ | async" [ngValue]="c._id">
         {{c.nombre}} <span *ngIf="c.esFrecuente">⭐</span>
       </option>
     </select>
@@ -15,9 +15,10 @@
     <select class="form-select" [(ngModel)]="vehiculoCod">
       <option [ngValue]="null" disabled>Seleccione vehículo</option>
       <option *ngFor="let v of vehiculos$ | async"
-              [value]="v.codigo"
+              [ngValue]="v.codigo"
               [disabled]="v.estado === 'ALQUILADO'">
-        {{v.nombre}} - {{v.precioDia | currency}}/día
+        {{v.nombre}} - {{v.tarifaDia | currency}}/día 
+        <span *ngIf="v.estado === 'ALQUILADO'">(Ocupado)</span>
       </option>
     </select>
 
@@ -28,7 +29,7 @@
       </div>
 
       <div>
-        <label class="form-label">Devolución</label>
+        <label class="form-label">Devolución (Tentativa)</label>
         <input type="date" class="form-input" [(ngModel)]="fTentativa">
       </div>
     </div>
@@ -42,7 +43,4 @@
     </div>
 
   </div>
-
-
-
 </div>

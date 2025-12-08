@@ -1,6 +1,8 @@
+const mongoose = require('mongoose');
 const Alquiler = require('../models/Alquiler');
 const Vehiculo = require('../models/Vehiculo');
 const Cliente = require('../models/Cliente');
+
 
 // 1. Clientes que alquilaron más de un vehículo
 exports.getClientesRecurrentes = async (req, res) => {

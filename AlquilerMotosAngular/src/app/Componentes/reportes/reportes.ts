@@ -23,18 +23,44 @@ import { EcoMoveService } from '../../Servicios/eco-move.service';
 })
 export class Reportes {
 
+  // Variables para almacenar los datos "desempaquetados"
+  totalDinero: number = 0;
   recurrentes: any[] = [];
-  totalDinero = 0;
+  populares: any[] = [];
+  multas: any[] = [];
+  
+  // Estado de carga
+  cargando: boolean = false;
 
   private service = inject(EcoMoveService);
 
-  constructor() {
-    // Auto-actualización cuando cambian los alquileres
-    this.service.alquileres$.subscribe(() => this.actualizar());
+  ngOnInit() {
+    this.actualizar();
   }
 
   actualizar() {
-    this.recurrentes = this.service.getClientesRecurrentes();
-    this.totalDinero = this.service.getTotalRecaudado();
+    this.cargando = true;
+
+    // 1. Total Recaudado
+    this.service.getTotalRecaudado().subscribe({
+      next: (data: any) => {
+        // Dependiendo de cómo lo devuelva tu backend (json o número directo)
+        // Asumimos que devuelve objeto { total: 1000 } o directo 1000
+        this.totalDinero = data.total !== undefined ? data.total : data;
+      },
+      error: () => this.totalDinero = 0
+    });
+
+    // 2. Clientes Recurrentes
+    this.service.getClientesRecurrentes().subscribe(data => this.recurrentes = data);
+
+    // 3. Vehículos Populares
+    this.service.getVehiculosPopulares().subscribe(data => this.populares = data);
+
+    // 4. Multas Altas (Para control)
+    this.service.getMultasAltas().subscribe(data => {
+      this.multas = data;
+      this.cargando = false; // Finaliza carga
+    });
   }
 }

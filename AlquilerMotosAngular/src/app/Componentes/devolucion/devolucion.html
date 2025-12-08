@@ -4,26 +4,45 @@
   <table>
     <thead>
       <tr>
-        <th>Vehículo</th>
-        <th>Fecha</th>
+        <th>Cliente</th> <th>Vehículo</th>
+        <th>Fecha Pactada</th>
         <th>Estado</th>
         <th>Acción</th>
       </tr>
     </thead>
 
     <tbody>
-      <tr *ngFor="let a of alquileres$ | async">
-        <ng-container *ngIf="a.estado === 'ACTIVO'">
-          <td>{{a.vehiculoCodigo}}</td>
-          <td>{{a.fechaTentativa | date:'dd/MM/yyyy'}}</td>
-          <td class="activo">En Curso</td>
+      <ng-container *ngFor="let a of alquileres$ | async">
+        <tr *ngIf="a.estado === 'ACTIVO'">
+          
+          <td>{{ a.clienteId?.nombre || 'Cliente Desconocido' }}</td>
+          
+          <td style="font-weight: bold; color: #2c3e50;">
+            {{ a.vehiculoCodigo }}
+          </td>
+          
+          <td>{{ a.fechaTentativa | date:'dd/MM/yyyy' }}</td>
+          
           <td>
-            <button class="btn-return" (click)="devolver(a.id)">
-              Recibir
+            <span *ngIf="esTardio(a.fechaTentativa)" class="tag tag-mora">
+              ⚠️ Con Retraso
+            </span>
+            <span *ngIf="!esTardio(a.fechaTentativa)" class="tag tag-tiempo">
+              ✅ A tiempo
+            </span>
+          </td>
+
+          <td>
+            <button class="btn-return" (click)="devolver(a._id)">
+              📥 Recibir
             </button>
           </td>
-        </ng-container>
-      </tr>
+        </tr>
+      </ng-container>
     </tbody>
   </table>
+
+  <div class="empty-state" *ngIf="(alquileres$ | async)?.length === 0">
+    <p>🍃 No hay vehículos pendientes de devolución.</p>
+  </div>
 </div>

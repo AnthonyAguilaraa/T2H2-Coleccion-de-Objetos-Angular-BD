@@ -3,25 +3,71 @@
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0,0,0,0.05);
   border: 1px solid #e5e7eb;
+  overflow: hidden; /* Importante para que el borde redondeado funcione con la cabecera */
+  margin: 1rem;
 }
 
 .header {
-  background: #d97706;
+  background: #d97706; /* Color ámbar/naranja */
   color: white;
   padding: 1rem;
   font-weight: 600;
+  font-size: 1.1rem;
 }
 
-table { width: 100%; border-collapse: collapse; }
+table { 
+  width: 100%; 
+  border-collapse: collapse; 
+}
 
-th, td { padding: 1rem; border-bottom: 1px solid #e5e7eb; }
+th {
+  background: #fdf4ff; /* Un fondo muy suave para cabeceras si gustas, o blanco */
+  background: #fff7ed;
+  color: #9a3412;
+  font-size: 0.9rem;
+  text-align: left;
+}
 
-.activo { color: #059669; font-weight: bold; }
+th, td { 
+  padding: 1rem; 
+  border-bottom: 1px solid #e5e7eb; 
+}
+
+/* Hover en las filas */
+tr:hover {
+  background-color: #f9fafb;
+}
+
+/* Etiquetas de estado */
+.tag-tiempo {
+  background-color: #d1fae5;
+  color: #065f46;
+  padding: 4px 8px;
+  border-radius: 99px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.tag-mora {
+  background-color: #fee2e2;
+  color: #991b1b;
+  padding: 4px 8px;
+  border-radius: 99px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
 
 .btn-return {
-  background: #ef4444;
+  background: #ef4444; /* Rojo */
   color: white;
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.btn-return:hover {
+  background: #dc2626;
 }

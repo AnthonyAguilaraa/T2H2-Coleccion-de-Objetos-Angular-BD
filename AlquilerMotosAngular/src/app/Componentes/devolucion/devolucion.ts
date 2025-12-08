@@ -24,16 +24,27 @@ import { Observable } from 'rxjs';
 })
 export class Devolucion implements OnInit {
 
+  // Usaremos un Observable para la lista
   alquileres$!: Observable<any[]>;
   private service = inject(EcoMoveService);
 
   ngOnInit() {
+    // Obtenemos los datos frescos
+    this.service.obtenerAlquileres();
+    
+    // Asignamos el observable
     this.alquileres$ = this.service.alquileres$;
   }
 
-  devolver(id: number) {
-    if(confirm("¿Confirmar devolución?")) {
-      alert(this.service.procesarDevolucion(id, new Date()));
+  devolver(id: string) {
+    if(confirm("¿Confirmar recepción del vehículo y finalizar alquiler?")) {
+      // Enviamos la fecha actual como fecha de devolución
+      this.service.procesarDevolucion(id, new Date());
     }
+  }
+
+  // Helper para saber si ya se pasó de fecha (Solo visual)
+  esTardio(fechaTentativa: string): boolean {
+    return new Date() > new Date(fechaTentativa);
   }
 }

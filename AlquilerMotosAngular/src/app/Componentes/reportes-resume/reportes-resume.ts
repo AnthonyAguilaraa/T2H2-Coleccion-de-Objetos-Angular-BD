@@ -20,16 +20,17 @@ export class ReportesResume {
 
   private service = inject(EcoMoveService);
 
-  constructor() {
-    // Actualiza cada vez que cambia un alquiler
-    this.service.alquileres$.subscribe(() => this.actualizar());
+  ngOnInit() { // Usar OnInit
+    this.actualizar();
   }
 
   actualizar() {
-    this.clientesMultialquiler = this.service.getClientesConMasDeUnAlquiler();
-    this.vehiculosPopulares = this.service.getVehiculosMasAlquilados();
-    this.alquileresConDescuentos = this.service.getAlquileresConDescuentosCompletos();
-    this.clientesConMultaAlta = this.service.getClientesConMultaMayorDeposito();
-    this.totalRecaudado = this.service.getTotalRecaudadoGeneral();
+    this.service.getClientesRecurrentes().subscribe(d => this.clientesMultialquiler = d);
+    this.service.getVehiculosPopulares().subscribe(d => this.vehiculosPopulares = d);
+    this.service.getDescuentosCompletos().subscribe(d => this.alquileresConDescuentos = d);
+    this.service.getMultasAltas().subscribe(d => this.clientesConMultaAlta = d);
+    
+    // El total viene como objeto { total: 123 }
+    this.service.getTotalRecaudado().subscribe((d: any) => this.totalRecaudado = d.total); 
   }
 }

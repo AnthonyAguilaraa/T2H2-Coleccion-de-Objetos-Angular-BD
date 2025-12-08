@@ -1,5 +1,5 @@
 export interface Cliente {
-  id: number;
+  _id?: string;
   nombre: string;
   edad: number;
   esFrecuente: boolean;

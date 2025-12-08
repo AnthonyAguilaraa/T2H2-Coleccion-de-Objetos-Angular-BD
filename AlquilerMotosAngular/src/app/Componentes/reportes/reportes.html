@@ -1,21 +1,55 @@
-<div class="stats-card">
-  <h4>📊 Estadísticas Eco-Move</h4>
+<div class="dashboard-header">
+  <h2>📊 Dashboard Eco-Move</h2>
+  <button class="btn-refresh" (click)="actualizar()">
+    🔄 {{ cargando ? 'Cargando...' : 'Actualizar Datos' }}
+  </button>
+</div>
 
-  <div class="stat-item">
-    <div class="stat-label">CAJA TOTAL RECAUDADA</div>
-    <div class="stat-value">{{ totalDinero | currency }}</div>
+<div class="dashboard-grid">
+
+  <div class="stats-card highlight">
+    <div class="card-icon">💰</div>
+    <div class="stat-content">
+      <div class="stat-label">INGRESOS TOTALES</div>
+      <div class="stat-value">{{ totalDinero | currency }}</div>
+      <small>Incluye alquileres y multas</small>
+    </div>
   </div>
 
-  <div class="stat-item">
-    <div class="stat-label">CLIENTES VIP (Frecuentes)</div>
-    <ul>
+  <div class="stats-card">
+    <div class="card-header-sm">🏆 Clientes Frecuentes</div>
+    <ul class="lista-simple">
       <li *ngFor="let c of recurrentes">
-        👑 {{ c.nombre }}
+        <span class="nombre">{{ c.nombre }}</span>
+        <span class="badge-vip">VIP</span>
       </li>
+      <li *ngIf="recurrentes.length === 0" class="empty">No hay datos</li>
     </ul>
   </div>
 
-  <button class="btn-refresh" (click)="actualizar()">
-    🔄 Actualizar datos
-  </button>
+  <div class="stats-card">
+    <div class="card-header-sm">🔥 Top Vehículos</div>
+    <ul class="lista-rank">
+      <li *ngFor="let v of populares; let i = index">
+        <span class="rank">#{{ i + 1 }}</span>
+        <span class="modelo">{{ v.vehiculoInfo.nombre }}</span>
+        <span class="count">{{ v.count }} alq.</span>
+      </li>
+      <li *ngIf="populares.length === 0" class="empty">No hay datos</li>
+    </ul>
+  </div>
+
+  <div class="stats-card danger">
+    <div class="card-header-sm">⚠️ Multas Recientes</div>
+    <table class="mini-table">
+      <tr *ngFor="let m of multas">
+        <td>{{ m.vehiculoCodigo }}</td>
+        <td class="text-danger">{{ m.multa | currency }}</td>
+      </tr>
+      <tr *ngIf="multas.length === 0">
+        <td colspan="2" class="empty">¡Sin infracciones!</td>
+      </tr>
+    </table>
+  </div>
+
 </div>

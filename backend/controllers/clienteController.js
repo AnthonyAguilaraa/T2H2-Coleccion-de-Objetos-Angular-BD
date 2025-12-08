@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Cliente = require('../models/Cliente');
 
 // Obtener todos los clientes
@@ -54,5 +55,28 @@ exports.eliminarCliente = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ msg: 'Hubo un error al eliminar el cliente' });
+    }
+};
+
+// Actualizar un cliente existente
+exports.actualizarCliente = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { nombre, edad, esFrecuente } = req.body;
+
+        const clienteActualizado = await Cliente.findByIdAndUpdate(
+            id,
+            { nombre, edad, esFrecuente },
+            { new: true } // Esto hace que te devuelva el dato ya cambiado
+        );
+
+        if (!clienteActualizado) {
+            return res.status(404).json({ msg: 'Cliente no encontrado' });
+        }
+
+        res.json(clienteActualizado);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Error al actualizar cliente' });
     }
 };

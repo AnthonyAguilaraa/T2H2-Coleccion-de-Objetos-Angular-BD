@@ -1,6 +1,12 @@
+import { Cliente } from './cliente'; // Asegúrate de importar Cliente
+
 export interface Alquiler {
-  id: number;
-  clienteId: number;
+  _id?: string;
+  // CAMBIO CLAVE:
+  // Puede ser string (cuando envías el ID para crear) 
+  // O puede ser de tipo Cliente (cuando recibes el dato con populate)
+  clienteId: string | Cliente; 
+  
   vehiculoCodigo: string;
   fechaInicio: Date;
   fechaTentativa: Date;

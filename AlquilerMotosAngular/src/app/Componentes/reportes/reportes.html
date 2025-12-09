@@ -1,7 +1,7 @@
 <div class="dashboard-header">
   <h2>📊 Dashboard Eco-Move</h2>
-  <button class="btn-refresh" (click)="actualizar()">
-    🔄 {{ cargando ? 'Cargando...' : 'Actualizar Datos' }}
+  <button class="btn-refresh" (click)="actualizar()" [disabled]="cargando">
+    {{ cargando ? '⏳ Cargando...' : '🔄 Actualizar Datos' }}
   </button>
 </div>
 
@@ -20,8 +20,8 @@
     <div class="card-header-sm">🏆 Clientes Frecuentes</div>
     <ul class="lista-simple">
       <li *ngFor="let c of recurrentes">
-        <span class="nombre">{{ c.nombre }}</span>
-        <span class="badge-vip">VIP</span>
+        <span class="nombre">👤 {{ c.cliente }}</span>
+        <span class="badge-vip">{{ c.totalAlquileres }} Alq.</span>
       </li>
       <li *ngIf="recurrentes.length === 0" class="empty">No hay datos</li>
     </ul>
@@ -32,22 +32,22 @@
     <ul class="lista-rank">
       <li *ngFor="let v of populares; let i = index">
         <span class="rank">#{{ i + 1 }}</span>
-        <span class="modelo">{{ v.vehiculoInfo.nombre }}</span>
-        <span class="count">{{ v.count }} alq.</span>
+        <span class="modelo">{{ v.nombre }}</span>
+        <span class="count">{{ v.vecesAlquilado }} viajes</span>
       </li>
       <li *ngIf="populares.length === 0" class="empty">No hay datos</li>
     </ul>
   </div>
 
   <div class="stats-card danger">
-    <div class="card-header-sm">⚠️ Multas Recientes</div>
+    <div class="card-header-sm">⚠️ Deudas Críticas (> Depósito)</div>
     <table class="mini-table">
       <tr *ngFor="let m of multas">
-        <td>{{ m.vehiculoCodigo }}</td>
+        <td>{{ m.clienteId?.nombre || 'Cliente' }}</td>
         <td class="text-danger">{{ m.multa | currency }}</td>
       </tr>
       <tr *ngIf="multas.length === 0">
-        <td colspan="2" class="empty">¡Sin infracciones!</td>
+        <td colspan="2" class="empty">¡Sin infracciones graves!</td>
       </tr>
     </table>
   </div>

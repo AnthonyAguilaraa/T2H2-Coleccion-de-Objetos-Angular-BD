@@ -1,15 +1,3 @@
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-alquiler',
-//   imports: [],
-//   templateUrl: './alquiler.html',
-//   styleUrl: './alquiler.css',
-// })
-// export class Alquiler {
-
-// }
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -75,9 +63,7 @@ export class Alquiler implements OnInit {
     // Nota: El servicio maneja la suscripción HTTP y las alertas (alert) internamente.
     this.service.crearAlquiler(
       this.clienteId, 
-      this.vehiculoCod, 
-      fechaIni, 
-      fechaFin
+      
     );
 
     // 3. Limpiar formulario si se desea, o esperar a ver si el servicio dio error.

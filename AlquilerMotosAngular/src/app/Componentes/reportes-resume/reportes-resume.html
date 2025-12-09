@@ -2,7 +2,6 @@
 
   <h3>📊 Reportes Eco-Move</h3>
 
-  <!-- RECAUDACIÓN TOTAL -->
   <div class="report-item highlight">
     <strong>💰 Total Recaudado:</strong>
     <span>{{ totalRecaudado | currency }}</span>
@@ -10,45 +9,41 @@
 
   <hr>
 
-  <!-- 1. Clientes con más de 1 alquiler -->
   <div class="report-item">
     <strong>1️⃣ Clientes que alquilaron más de un vehículo</strong>
     <ul>
       <li *ngFor="let c of clientesMultialquiler">
-        👤 {{c.nombre}} — {{c.cantidad}} alquileres
+        👤 {{c.cliente}} — {{c.totalAlquileres}} alquileres
       </li>
       <li *ngIf="clientesMultialquiler.length === 0">Sin datos.</li>
     </ul>
   </div>
 
-  <!-- 2. Vehículos más alquilados -->
   <div class="report-item">
     <strong>2️⃣ Vehículos más alquilados</strong>
     <ul>
       <li *ngFor="let v of vehiculosPopulares">
-        🚲 {{v.nombre}} — {{v.cantidad}} veces
+        🚲 {{v.nombre}} — {{v.vecesAlquilado}} veces
       </li>
       <li *ngIf="vehiculosPopulares.length === 0">Sin datos.</li>
     </ul>
   </div>
 
-  <!-- 3. Alquileres con ambos descuentos -->
   <div class="report-item">
-    <strong>3️⃣ Alquileres con descuento doble (Frecuente + Extendido)</strong>
+    <strong>3️⃣ Alquileres con descuento doble</strong>
     <ul>
       <li *ngFor="let a of alquileresConDescuentos">
-        #{{a.id}} — Cliente {{a.clienteId}}, Vehículo {{a.vehiculoCodigo}}
+        #{{a._id | slice:0:6}}... — Cliente: {{a.clienteId?.nombre || 'Desconocido'}}
       </li>
       <li *ngIf="alquileresConDescuentos.length === 0">Sin resultados.</li>
     </ul>
   </div>
 
-  <!-- 4. Multa > Depósito -->
   <div class="report-item">
     <strong>5️⃣ Clientes con multa mayor al depósito</strong>
     <ul>
       <li *ngFor="let x of clientesConMultaAlta">
-        ⚠️ {{x.cliente.nombre}} — Multa: {{x.multa | currency}} > Depósito: {{x.deposito | currency}}
+        ⚠️ {{x.clienteId?.nombre}} — Multa: {{x.multa | currency}} > Depósito: {{x.deposito | currency}}
       </li>
       <li *ngIf="clientesConMultaAlta.length === 0">Sin casos registrados.</li>
     </ul>

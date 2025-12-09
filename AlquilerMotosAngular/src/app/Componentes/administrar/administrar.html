@@ -116,4 +116,43 @@
     </table>
   </div>
   
+  <div *ngIf="vistaActual === 'DEVOLUCIONES'" class="crud-panel">
+    <h3>✅ Historial de Finalizados</h3>
+    
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Vehículo</th>
+          <th>Devolución</th>
+          <th>Multa</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let a of alquileres$ | async">
+          <tr *ngIf="a.estado === 'FINALIZADO'">
+            
+            <td>{{ getClienteNombre(a.clienteId) }}</td>
+            
+            <td>{{ a.vehiculoCodigo }}</td>
+            
+            <td>{{ (a.fechaDevolucionReal || a.fechaTentativa) | date:'dd/MM/yy' }}</td>
+            
+            <td>{{ (a.multa || 0) | currency }}</td>
+            
+            <td>
+              <button class="btn-delete" (click)="eliminarAlquiler(a._id!)">
+                Borrar
+              </button>
+            </td>
+          </tr>
+        </ng-container>
+
+        <tr *ngIf="(alquileres$ | async)?.length === 0">
+          <td colspan="5" style="text-align: center;">No hay historial disponible.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   </div>

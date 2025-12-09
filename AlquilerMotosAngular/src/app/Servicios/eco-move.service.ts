@@ -32,15 +32,7 @@ export class EcoMoveService {
   // ==========================================
   // METODOS API (GET & REFRESH)
   // ==========================================
-  // obtenerClientes() {
-  //   this.http.get<Cliente[]>(`${this.apiUrl}/clientes`)
-  //     .subscribe(data => this.clientes$.next(data));
-  // }
 
-  // obtenerVehiculos() {
-  //   this.http.get<Vehiculo[]>(`${this.apiUrl}/vehiculos`)
-  //     .subscribe(data => this.vehiculos$.next(data));
-  // }
   obtenerClientes() {
   this.http.get<Cliente[]>(`${this.apiUrl}/clientes`)
     .subscribe(data => {
@@ -119,77 +111,23 @@ actualizarVehiculo(codigo: string, vehiculo: Vehiculo) {
   // ==========================================
   // LÓGICA DE NEGOCIO: ALQUILER
   // ==========================================
-  
-  // Paso 1: Validaciones (Síncronas) -> Paso 2: Guardar en BD (Asíncrono)
-  // crearAlquiler(clienteId: string, vehiculoCodigo: string, fInicio: Date, fTentativa: Date): void {
-  //   const cliente = this.clientes$.getValue().find(c => c._id === clienteId);
-  //   const vehiculo = this.vehiculos$.getValue().find(v => v.codigo === vehiculoCodigo);
 
-  //   if (!cliente || !vehiculo) { alert('Error: Datos no encontrados'); return; }
-  //   if (vehiculo.estado === 'ALQUILADO') { alert('Error: Vehículo no disponible'); return; }
-  //   if (vehiculo.requiereEdad && cliente.edad < 18) { alert('Cliente menor de edad'); return; }
-
-  //   // Cálculos en Frontend (para enviar ya calculado al backend)
-  //   const dias = Math.max(1, Math.ceil((new Date(fTentativa).getTime() - new Date(fInicio).getTime()) / (1000 * 3600 * 24)));
-  //   const importe = dias * vehiculo.tarifaDia;
-  //   const descExt = dias > 5 ? importe * 0.15 : 0;
-  //   const subtotal = importe - descExt;
-  //   const descFrec = cliente.esFrecuente ? subtotal * 0.10 : 0;
-  //   const deposito = importe * 0.12;
-
-  //   const nuevoAlquiler: any = {
-  //     clienteId: clienteId,
-  //     vehiculoCodigo: vehiculoCodigo,
-  //     fechaInicio: fInicio,
-  //     fechaTentativa: fTentativa,
-  //     diasCalculados: dias,
-  //     importeBase: importe,
-  //     descuentoExtendido: descExt,
-  //     descuentoFrecuente: descFrec,
-  //     deposito: deposito,
-  //     totalPagadoInicial: (importe - descExt - descFrec) + deposito,
-  //     estado: 'ACTIVO'
-  //   };
-
-  //   // Enviar al Backend
-  //   this.http.post(`${this.apiUrl}/alquileres`, nuevoAlquiler).subscribe({
-  //     next: () => {
-  //       alert('✅ Alquiler registrado con éxito en BD');
-  //       this.obtenerAlquileres(); // Actualiza lista alquileres
-  //       this.obtenerVehiculos();  // Actualiza estado de vehículos (Disponible -> Alquilado)
-  //     },
-  //     error: (err) => alert('❌ Error en servidor: ' + err.error.msg)
-  //   });
-  // }
-
-  crearAlquiler(clienteId: string, vehiculoCodigo: string, fInicio: Date, fTentativa: Date): void {
-  const cliente = this.clientes$.getValue().find(c => c._id === clienteId);
-  const vehiculo = this.vehiculos$.getValue().find(v => v.codigo === vehiculoCodigo);
-
-  // Verificación de datos
-  console.log('Cliente:', cliente);
-  console.log('Vehículo:', vehiculo);
-  console.log('Fechas:', fInicio, fTentativa);
-
-  if (!cliente || !vehiculo) { alert('Error: Datos no encontrados'); return; }
-  if (vehiculo.estado === 'ALQUILADO') { alert('Error: Vehículo no disponible'); return; }
-
-  const nuevoAlquiler = {
-    clienteId: clienteId,
-    vehiculoCodigo: vehiculoCodigo,
-    fechaInicio: fInicio,
-    fechaTentativa: fTentativa,
-    // Otros datos calculados
-  };
-
-  // Enviar al Backend
-  this.http.post(`${this.apiUrl}/alquileres`, nuevoAlquiler).subscribe({
-    next: () => {
-      alert('✅ Alquiler registrado con éxito en BD');
+// Modifica este método:
+crearAlquiler(datosAlquiler: any): void {
+  // Ya no recibimos parámetros sueltos, sino el objeto completo calculado
+  this.http.post(`${this.apiUrl}/alquileres`, datosAlquiler).subscribe({
+    next: (respuesta) => {
+      console.log('Alquiler creado:', respuesta);
+      alert('✅ Alquiler registrado con éxito');
+      
+      // Actualizamos las listas para que se vea reflejado al instante
       this.obtenerAlquileres();
-      this.obtenerVehiculos();
+      this.obtenerVehiculos(); // Para que el vehículo pase a "ALQUILADO" en la lista
     },
-    error: (err) => alert('❌ Error en servidor: ' + err.error.msg)
+    error: (err) => {
+      console.error(err);
+      alert('❌ Error: ' + (err.error?.msg || err.message));
+    }
   });
 }
 

@@ -85,27 +85,49 @@ export class AlquilerResumen implements OnInit {
     };
   }
 
-  // Función para registrar el alquiler en el sistema
   registrar() {
-    if (!this.clienteId || !this.vehiculoCod) {
-      this.mensaje = "Seleccione cliente y vehículo";
-      return;
-    }
-    if (!this.fInicio || !this.fTentativa) {
-      this.mensaje = "Ingrese las fechas";
-      return;
-    }
-
-    // Crear el alquiler en el backend
-    this.service.crearAlquiler(
-      this.clienteId,
-      this.vehiculoCod,
-      new Date(this.fInicio),
-      new Date(this.fTentativa)
-    );
-
-    // Limpiar formulario y mostrar mensaje de procesamiento
-    this.mensaje = "Procesando...";
-    this.resumen = null;
+  if (!this.clienteId || !this.vehiculoCod) {
+    this.mensaje = "Seleccione cliente y vehículo";
+    return;
   }
+  if (!this.fInicio || !this.fTentativa) {
+    this.mensaje = "Ingrese las fechas";
+    return;
+  }
+  
+  // Si no se ha calculado el resumen, forzamos el cálculo para tener los montos
+  if (!this.resumen) {
+      this.calcularResumen();
+  }
+
+  // Preparamos el objeto tal cual lo espera tu modelo de Mongoose (Alquiler.js)
+  const nuevoAlquiler = {
+    clienteId: this.clienteId,
+    vehiculoCodigo: this.vehiculoCod,
+    fechaInicio: new Date(this.fInicio),
+    fechaTentativa: new Date(this.fTentativa),
+    
+    // Datos calculados (Mapeamos las variables de tu 'resumen' al Schema)
+    diasCalculados: this.resumen.dias,
+    importeBase: this.resumen.importe,
+    descuentoExtendido: this.resumen.descExtendido,
+    descuentoFrecuente: this.resumen.descFrecuente,
+    deposito: this.resumen.deposito,
+    totalPagadoInicial: this.resumen.total,
+    
+    estado: 'ACTIVO'
+  };
+
+  console.log('Enviando al backend:', nuevoAlquiler);
+
+  // Llamamos al servicio con el objeto completo
+  this.service.crearAlquiler(nuevoAlquiler);
+
+  // Limpieza UI
+  this.mensaje = "Procesando...";
+  this.resumen = null;
+  this.clienteId = ''; // Opcional: limpiar selección
+  this.vehiculoCod = '';
+}
+
 }

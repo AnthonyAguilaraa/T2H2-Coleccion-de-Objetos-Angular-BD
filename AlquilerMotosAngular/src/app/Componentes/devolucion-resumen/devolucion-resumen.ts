@@ -88,6 +88,8 @@ export class DevolucionResumen implements OnInit {
       depositoDevuelto,
       subtotalFinal
     };
+
+    console.log("Resumen calculado:", this.resumen);
   }
 
   confirmar() {
@@ -99,7 +101,10 @@ export class DevolucionResumen implements OnInit {
       this.resumen = null;
       this.seleccionado = null;
 
+      this.service.obtenerAlquileres();
+
 this.cdr.detectChanges();
+      alert("Devolución procesada con éxito");
       console.log("Devolución procesada con éxito");
     },
     error: (err) => {

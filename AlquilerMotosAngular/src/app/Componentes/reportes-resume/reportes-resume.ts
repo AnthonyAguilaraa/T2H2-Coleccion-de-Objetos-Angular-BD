@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { EcoMoveService } from '../../Servicios/eco-move.service';
 import { CommonModule } from '@angular/common';
 
@@ -15,22 +15,67 @@ export class ReportesResume {
   vehiculosPopulares: any[] = [];
   alquileresConDescuentos: any[] = [];
   clientesConMultaAlta: any[] = [];
-
   totalRecaudado: number = 0;
 
   private service = inject(EcoMoveService);
 
-  ngOnInit() { // Usar OnInit
+  constructor(private cdr: ChangeDetectorRef) {}
+
+  ngOnInit() {
     this.actualizar();
   }
 
   actualizar() {
-    this.service.getClientesRecurrentes().subscribe(d => this.clientesMultialquiler = d);
-    this.service.getVehiculosPopulares().subscribe(d => this.vehiculosPopulares = d);
-    this.service.getDescuentosCompletos().subscribe(d => this.alquileresConDescuentos = d);
-    this.service.getMultasAltas().subscribe(d => this.clientesConMultaAlta = d);
+    console.log('Iniciando carga de reportes...');
     
-    // El total viene como objeto { total: 123 }
-    this.service.getTotalRecaudado().subscribe((d: any) => this.totalRecaudado = d.total); 
+    // 1. Clientes Recurrentes
+    this.service.getClientesRecurrentes().subscribe({
+      next: (data) => {
+        console.log('✅ Clientes Recurrentes:', data);
+        this.clientesMultialquiler = data;
+        this.cdr.detectChanges(); // Detectar cambios manualmente
+      },
+      error: (err) => console.error('❌ Error Clientes Recurrentes:', err)
+    });
+
+    // 2. Vehículos Populares
+    this.service.getVehiculosPopulares().subscribe({
+      next: (data) => {
+        console.log('✅ Vehículos Populares:', data);
+        this.vehiculosPopulares = data;
+        this.cdr.detectChanges(); // Detectar cambios manualmente
+      },
+      error: (err) => console.error('❌ Error Vehículos:', err)
+    });
+
+    // 3. Descuentos Dobles
+    this.service.getDescuentosCompletos().subscribe({
+      next: (data) => {
+        console.log('✅ Descuentos Dobles:', data);
+        this.alquileresConDescuentos = data;
+        this.cdr.detectChanges(); // Detectar cambios manualmente
+      },
+      error: (err) => console.error('❌ Error Descuentos:', err)
+    });
+
+    // 4. Multas Altas
+    this.service.getMultasAltas().subscribe({
+      next: (data) => {
+        console.log('✅ Multas Altas:', data);
+        this.clientesConMultaAlta = data;
+        this.cdr.detectChanges(); // Detectar cambios manualmente
+      },
+      error: (err) => console.error('❌ Error Multas:', err)
+    });
+
+    // 5. Total Recaudado
+    this.service.getTotalRecaudado().subscribe({
+      next: (data: any) => {
+        console.log('✅ Total Recaudado RAW:', data);
+        this.totalRecaudado = data?.totalIngresos || 0;
+        this.cdr.detectChanges(); // Detectar cambios manualmente
+      },
+      error: (err) => console.error('❌ Error Total:', err)
+    });
   }
 }
